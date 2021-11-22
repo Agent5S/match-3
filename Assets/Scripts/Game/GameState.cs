@@ -46,7 +46,8 @@ public class GameState : MonoBehaviour
                 availableValues[max[0]] = availableValues[lastValidIndex];
                 lastValidIndex--;
             }
-            if (min[0] == min[1])
+            //Do not remove min if it is the same as max
+            if (min[0] == min[1] && min[0] != max[0])
             {
                 availableValues[min[0]] = availableValues[lastValidIndex];
                 lastValidIndex--;
@@ -63,6 +64,7 @@ public class GameState : MonoBehaviour
             var nextIndex = i + 1;
             var y_2 = nextIndex - columns - columns;
             xy[1] = Math.DivRem(nextIndex, columns, out xy[0]);
+            //FIXME: This generates garbage
             left = xy[0] == 0 ?
                 new int[]{ -1, -2 } :
                 new int[]{ selectedValue, left[0] };
