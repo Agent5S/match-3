@@ -89,7 +89,9 @@ public class GameState : MonoBehaviour
             var store = board[newIndex];
             this.board[newIndex] = board[selectedIndex];
             this.board[selectedIndex] = store;
+            selectedIndex = -10;
             display.UpdateButtons();
+            return;
         }
 
         selectedIndex = newIndex;
