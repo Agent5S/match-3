@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class DisplayState : MonoBehaviour
@@ -20,7 +21,12 @@ public class DisplayState : MonoBehaviour
 
         for (int i = 0; i < n; i++)
         {
+            var index = i;
             GameObject button = Instantiate(buttonPrefab);
+            Button btnComponent = button.GetComponent<Button>();
+            //FIXME: This will create a different lambda per button,
+            //put this inside a component
+            btnComponent.onClick.AddListener(() => { state.Select(index); });
             TextMeshProUGUI display = button
                 .GetComponentInChildren<TextMeshProUGUI>();
             this.displays[i] = display;
@@ -35,7 +41,7 @@ public class DisplayState : MonoBehaviour
 
     public void UpdateButtons()
     {
-        for (int i = 0; i < displays.Length - 1; i++)
+        for (int i = 0; i < displays.Length; i++)
         {
             var display = displays[i];
             display.text = $"{Symbols[state.board[i]]}";
