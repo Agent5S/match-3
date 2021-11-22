@@ -656,6 +656,8 @@ GameObject:
   - component: {fileID: 2040280195}
   - component: {fileID: 2040280194}
   - component: {fileID: 2040280198}
+  - component: {fileID: 2040280200}
+  - component: {fileID: 2040280199}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -771,3 +773,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonsPerRow: 8
+--- !u!114 &2040280199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040280192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a2750afba1348ada90cb8a210240f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonPrefab: {fileID: 4843312378884367623, guid: 37ca3c548028a421f951484b1db04d08, type: 3}
+--- !u!114 &2040280200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040280192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0ef19feceb9466a8850970456a262e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 8
