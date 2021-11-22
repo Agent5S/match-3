@@ -30,6 +30,11 @@ public class DisplayState : MonoBehaviour
 
     private void Start()
     {
+        UpdateButtons();
+    }
+
+    public void UpdateButtons()
+    {
         for (int i = 0; i < displays.Length - 1; i++)
         {
             var display = displays[i];

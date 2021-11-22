@@ -18,8 +18,12 @@ public class GameState : MonoBehaviour
         get => _board;
     }
 
+    private DisplayState display;
+
     private void Awake()
     {
+        this.display = GetComponent<DisplayState>();
+
         board = new int[columns * columns];
 
         int[] availableValues = new int[PossibleValues.Length];
@@ -85,6 +89,7 @@ public class GameState : MonoBehaviour
             var store = board[newIndex];
             this.board[newIndex] = board[selectedIndex];
             this.board[selectedIndex] = store;
+            display.UpdateButtons();
         }
 
         selectedIndex = newIndex;
