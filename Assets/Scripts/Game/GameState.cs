@@ -9,6 +9,8 @@ public class GameState : MonoBehaviour
     private static int[] PossibleValues = { 0, 1, 2, 3 };
     public int columns = 8;
 
+    //Use a value less than -8 as empty value to prevent bugs
+    public int selectedIndex = -10;
     private int[] _board;
     public int[] board
     {
@@ -73,5 +75,18 @@ public class GameState : MonoBehaviour
                 new int[] { board[nextIndex - columns],
                     y_2 < 0 ? -1 : board[y_2] };
         }
+    }
+
+    public void Select(int newIndex)
+    {
+        var indexDelta = Mathf.Abs(newIndex - selectedIndex);
+        if (indexDelta == 1 || indexDelta == 8)
+        {
+            var store = board[newIndex];
+            this.board[newIndex] = board[selectedIndex];
+            this.board[selectedIndex] = store;
+        }
+
+        selectedIndex = newIndex;
     }
 }
