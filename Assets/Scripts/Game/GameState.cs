@@ -11,10 +11,7 @@ public class GameState : MonoBehaviour
     private void Awake()
     {
         board = new int[columns * columns];
-    }
 
-    private void Start()
-    {
         for (int i = 0; i < board.Length; i++)
         {
             //Draw a random value from 0-4
