@@ -33,6 +33,8 @@ public class GameState
         }
     }
 
+
+
     //Utility array to simulate copy semantics 
     private int[] boardCopy = new int[Columns * Columns];
     private void SwapBoards()
@@ -42,6 +44,9 @@ public class GameState
         board = copy;
         OnBoardUpdated?.Invoke();
     }
+
+    //Creating my own implementation might be more performant on some cases
+    private SortedSet<int> matches = new SortedSet<int>();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void CreateState()
@@ -83,9 +88,8 @@ public class GameState
             }
 
             //Draw a random value from the available values
-            var selectedIndex = (int)(
-                UnityEngine.Random.value * lastValidIndex
-            );
+            var selectedIndex =
+                (int)(UnityEngine.Random.value * lastValidIndex);
             var selectedValue = availableValues[selectedIndex];
             newBoard[i] = selectedValue;
 
@@ -116,10 +120,113 @@ public class GameState
             this.boardCopy[newIndex] = boardCopy[SelectedIdx];
             this.boardCopy[SelectedIdx] = temp;
             SwapBoards();
+            CheckMatches();
             SelectedIdx = -10;
             return;
         }
 
         SelectedIdx = newIndex;
+    }
+
+    public void CheckMatches()
+    {
+        matches.Clear();
+        //Horizontal check
+        for (int i = 0; i < GameState.Columns; i++)
+        {
+            var rowStart = i * GameState.Columns;
+            var firstMatch = rowStart;
+            for (int j = 1; j < GameState.Columns; j++)
+            {
+                var index = rowStart + j;
+                //If they match keep going
+                if (Board[index] == Board[index - 1])
+                {
+                    continue;
+                }
+
+                //If more than two matching cells precede 
+                //add them to the matching array
+                if (index - firstMatch > 2)
+                {
+                    for (int a = firstMatch; a < index; a++)
+                    {
+                        matches.Add(a);
+                    }
+                }
+                firstMatch = index;
+            }
+            //Used for matching the last cell on the row
+            var nextIndex = rowStart + GameState.Columns;
+            if (nextIndex - firstMatch > 2)
+            {
+                for (int a = firstMatch; a < nextIndex; a++)
+                {
+                    matches.Add(a);
+                }
+            }
+        }
+
+        //Vertical check
+        for (int i = 0; i < GameState.Columns; i++)
+        {
+            var columnStart = i;
+            var firstMatch = columnStart;
+            for (int j = 8; j < 64; j += 8)
+            {
+                var index = columnStart + j;
+                //If they match keep going
+                if (Board[index] == Board[index - 8])
+                {
+                    continue;
+                }
+
+                //If more than two matching cells precede 
+                //add them to the matching array
+                if (index - firstMatch > 2 * 8)
+                {
+                    for (int a = firstMatch; a < index; a += 8)
+                    {
+                        matches.Add(a);
+                    }
+                }
+                firstMatch = index;
+            }
+            //Used for matching the last cell on the column
+            var nextIndex = columnStart + 64;
+            if (nextIndex - firstMatch > 2 * 8)
+            {
+                for (int a = firstMatch; a < nextIndex; a += 8)
+                {
+                    matches.Add(a);
+                }
+            }
+        }
+
+        if (matches.Count > 0) {
+            ReplaceMatches();
+        }
+    }
+
+    //This could be integrated into CheckMatches with a do-while loop
+    private void ReplaceMatches()
+    {
+        Array.Copy(board, boardCopy, board.Length);
+
+        //FIXME: Do we still need to avoid foreach in 2021?
+        foreach(var match in matches)
+        {
+            var index = match;
+            for (int i = index - 8; i > 0; i -= 8)
+            {
+                this.boardCopy[index] = boardCopy[i];
+                index = i;
+            }
+
+            this.boardCopy[index] =
+                (int)(UnityEngine.Random.value * PossibleValues.Length - 1);
+        }
+        SwapBoards();
+        //CheckMatches();
     }
 }
