@@ -43,7 +43,7 @@ public class GameState
         OnBoardUpdated?.Invoke();
     }
 
-    [RuntimeInitializeOnLoadMethod]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void CreateState()
     {
         Global = new GameState();
@@ -76,7 +76,7 @@ public class GameState
                 lastValidIndex--;
             }
             //Do not remove min if it is the same as max
-            if (min[0] == min[1] && min[0] != max[0])
+            if (min[0] != max[0] && min[0] == min[1])
             {
                 availableValues[min[0]] = availableValues[lastValidIndex];
                 lastValidIndex--;
@@ -115,8 +115,8 @@ public class GameState
             var temp = boardCopy[newIndex];
             this.boardCopy[newIndex] = boardCopy[SelectedIdx];
             this.boardCopy[SelectedIdx] = temp;
-            SelectedIdx = -10;
             SwapBoards();
+            SelectedIdx = -10;
             return;
         }
 
