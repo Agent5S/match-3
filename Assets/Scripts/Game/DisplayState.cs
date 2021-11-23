@@ -6,19 +6,18 @@ using TMPro;
 
 public class DisplayState : MonoBehaviour
 {
-    static char[] Symbols = { 'A', 'B', 'C', 'D' };
+    static readonly char[] Symbols = { 'A', 'B', 'C', 'D' };
 
     public GameObject buttonPrefab;
 
-    private GameState state;
     private TextMeshProUGUI[] displays;
 
     private void Awake()
     {
-        this.state = GetComponent<GameState>();
-        var n = state.columns * state.columns;
-        this.displays = new TextMeshProUGUI[n];
+        var state = GameState.Global;
+        var n = state.Board.Length;
 
+        this.displays = new TextMeshProUGUI[n];
         for (int i = 0; i < n; i++)
         {
             var index = i;
@@ -41,10 +40,21 @@ public class DisplayState : MonoBehaviour
 
     public void UpdateButtons()
     {
+        var state = GameState.Global;
         for (int i = 0; i < displays.Length; i++)
         {
             var display = displays[i];
-            display.text = $"{Symbols[state.board[i]]}";
+            display.text = $"{Symbols[state.Board[i]]}";
         }
+    }
+
+    private void OnEnable()
+    {
+        GameState.OnBoardUpdated += UpdateButtons;
+    }
+
+    private void OnDisable()
+    {
+        GameState.OnBoardUpdated -= UpdateButtons;
     }
 }
