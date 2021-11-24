@@ -65,10 +65,10 @@ public class DisplayState : MonoBehaviour
             int matches;
             do
             {
-                yield return new WaitForSeconds(0.6f);
+                yield return delay;
                 if (GameState.Global.ReplaceMatches())
                 {
-                    yield return new WaitForSeconds(0.6f);
+                    yield return delay;
                 }
                 matches = GameState.Global.CheckMatches();
             } while (matches > 0);
