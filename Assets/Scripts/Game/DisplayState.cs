@@ -21,6 +21,7 @@ public class DisplayState : MonoBehaviour
 
     private void Awake()
     {
+        GameState.CreateState();
         var state = GameState.Global;
         var n = state.Board.Length;
 
