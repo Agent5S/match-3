@@ -11,6 +11,9 @@ public class GameState
     public delegate void UpdateSelected();
     public static event UpdateSelected OnSelectUpdated;
 
+    public delegate void UpateScore();
+    public static event UpateScore OnScoreUpdated;
+
     public static readonly int[] PossibleValues = { 0, 1, 2, 3, 4, 5 };
     public static readonly int Columns = 8;
     public static GameState Global;
@@ -30,6 +33,16 @@ public class GameState
         {
             this.selectedIdx = value;
             OnSelectUpdated?.Invoke();
+        }
+    }
+
+    private int score = 0;
+    public int Score
+    {
+        get => score;
+        set
+        {
+            this.score = value;
         }
     }
 
@@ -203,6 +216,7 @@ public class GameState
 
         if (matches.Count > 0)
         {
+            Score += matches.Count;
             //Leave matching spaces blank
             Array.Copy(board, boardCopy, board.Length);
             foreach (var match in matches)
