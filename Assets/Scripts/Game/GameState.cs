@@ -29,7 +29,7 @@ public class GameState
     public int SelectedIdx
     {
         get => selectedIdx;
-        set
+        private set
         {
             this.selectedIdx = value;
             OnSelectUpdated?.Invoke();
@@ -40,7 +40,7 @@ public class GameState
     public int Score
     {
         get => score;
-        set
+        private set
         {
             this.score = value;
         }
