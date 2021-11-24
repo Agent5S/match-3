@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameState
 {
@@ -77,6 +78,12 @@ public class GameState
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void CreateState()
     {
+        //Perhaps it was best to leave this in a MonoBehaviour D:
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            return;
+        }
+
         Global = new GameState();
         var newBoard = new int[Columns * Columns];
 
