@@ -20,6 +20,7 @@ public class GameState
 
     public static readonly int[] PossibleValues = { 0, 1, 2, 3, 4, 5 };
     public static readonly int Columns = 8;
+    public static readonly int Goal = 60;
     public static GameState Global;
 
     private int[] board;
@@ -75,15 +76,8 @@ public class GameState
     //Creating my own implementation might be more performant on some cases
     private SortedSet<int> matches = new SortedSet<int>();
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void CreateState()
+    public static void CreateState()
     {
-        //Perhaps it was best to leave this in a MonoBehaviour D:
-        if (SceneManager.GetActiveScene().buildIndex != 0)
-        {
-            return;
-        }
-
         Global = new GameState();
         var newBoard = new int[Columns * Columns];
 
