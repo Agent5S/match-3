@@ -43,6 +43,7 @@ public class GameState
         private set
         {
             this.score = value;
+            OnScoreUpdated?.Invoke();
         }
     }
 
