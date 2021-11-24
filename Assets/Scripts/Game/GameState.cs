@@ -14,6 +14,9 @@ public class GameState
     public delegate void UpateScore();
     public static event UpateScore OnScoreUpdated;
 
+    public delegate void UpdateSeconds();
+    public static event UpdateSeconds OnSecondsUpdated;
+
     public static readonly int[] PossibleValues = { 0, 1, 2, 3, 4, 5 };
     public static readonly int Columns = 8;
     public static GameState Global;
@@ -44,6 +47,17 @@ public class GameState
         {
             this.score = value;
             OnScoreUpdated?.Invoke();
+        }
+    }
+
+    private int seconds = 60;
+    public int Seconds
+    {
+        get => seconds;
+        set
+        {
+            this.seconds = value;
+            OnSecondsUpdated?.Invoke();
         }
     }
 
@@ -256,5 +270,10 @@ public class GameState
         }
 
         return false;
+    }
+
+    public void Tick()
+    {
+        this.Seconds--;
     }
 }
