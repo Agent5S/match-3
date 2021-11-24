@@ -920,4 +920,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 4843312378884367623, guid: 37ca3c548028a421f951484b1db04d08, type: 3}
+  eventSystem: {fileID: 1439181234}
   score: {fileID: 1104121192}
