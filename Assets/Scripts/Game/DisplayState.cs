@@ -44,6 +44,12 @@ public class DisplayState : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        UpdateButtons();
+        InvokeRepeating("CallTick", 1, 1);
+    }
+
     private IEnumerator ButtonSelect(int index)
     {
         if (GameState.Global.Select(index))
@@ -67,12 +73,6 @@ public class DisplayState : MonoBehaviour
                 buttons[i].enabled = true;
             }
         }
-    }
-
-    private void Start()
-    {
-        UpdateButtons();
-        InvokeRepeating("CallTick", 1, 1);
     }
 
     public void UpdateButtons()
