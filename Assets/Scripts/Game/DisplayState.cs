@@ -18,6 +18,7 @@ public class DisplayState : MonoBehaviour
 
     private TextMeshProUGUI[] displays;
     private Button[] buttons;
+    private WaitForSeconds delay = new WaitForSeconds(0.3f);
 
     private void Awake()
     {
