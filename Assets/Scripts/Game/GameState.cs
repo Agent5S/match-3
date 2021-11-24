@@ -11,7 +11,7 @@ public class GameState
     public delegate void UpdateSelected();
     public static event UpdateSelected OnSelectUpdated;
 
-    public static readonly int[] PossibleValues = { 0, 1, 2, 3 };
+    public static readonly int[] PossibleValues = { 0, 1, 2, 3, 4, 5 };
     public static readonly int Columns = 8;
     public static GameState Global;
 
@@ -32,8 +32,6 @@ public class GameState
             OnSelectUpdated?.Invoke();
         }
     }
-
-
 
     //Utility array to simulate copy semantics 
     private int[] boardCopy = new int[Columns * Columns];
@@ -109,7 +107,7 @@ public class GameState
         Global.board = newBoard;
     }
 
-    public void Select(int newIndex)
+    public bool Select(int newIndex)
     {
         Array.Copy(board, boardCopy, board.Length);
 
@@ -120,15 +118,15 @@ public class GameState
             this.boardCopy[newIndex] = boardCopy[SelectedIdx];
             this.boardCopy[SelectedIdx] = temp;
             SwapBoards();
-            CheckMatches();
             SelectedIdx = -10;
-            return;
+            return true;
         }
 
         SelectedIdx = newIndex;
+        return false;
     }
 
-    public void CheckMatches()
+    public int CheckMatches()
     {
         matches.Clear();
         //Horizontal check
@@ -203,30 +201,45 @@ public class GameState
             }
         }
 
-        if (matches.Count > 0) {
-            ReplaceMatches();
+        if (matches.Count > 0)
+        {
+            //Leave matching spaces blank
+            Array.Copy(board, boardCopy, board.Length);
+            foreach (var match in matches)
+            {
+                this.boardCopy[match] = -1;
+            }
+            SwapBoards();
         }
+
+        return matches.Count;
     }
 
     //This could be integrated into CheckMatches with a do-while loop
-    private void ReplaceMatches()
+    public bool ReplaceMatches()
     {
-        Array.Copy(board, boardCopy, board.Length);
+        //Should not need to do this if called in order
+        //Array.Copy(board, boardCopy, board.Length);
 
-        //FIXME: Do we still need to avoid foreach in 2021?
-        foreach(var match in matches)
+        if (matches.Count > 0)
         {
-            var index = match;
-            for (int i = index - 8; i > 0; i -= 8)
+            //FIXME: Do we still need to avoid foreach in 2021?
+            foreach (var match in matches)
             {
-                this.boardCopy[index] = boardCopy[i];
-                index = i;
-            }
+                var index = match;
+                for (int i = index - 8; i > 0; i -= 8)
+                {
+                    this.boardCopy[index] = boardCopy[i];
+                    index = i;
+                }
 
-            this.boardCopy[index] =
-                (int)(UnityEngine.Random.value * PossibleValues.Length - 1);
+                this.boardCopy[index] =
+                    (int)(UnityEngine.Random.value * PossibleValues.Length - 1);
+            }
+            SwapBoards();
+            return true;
         }
-        SwapBoards();
-        //CheckMatches();
+
+        return false;
     }
 }
