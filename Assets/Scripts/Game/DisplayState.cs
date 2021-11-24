@@ -12,6 +12,8 @@ public class DisplayState : MonoBehaviour
     public GameObject buttonPrefab;
     public EventSystem eventSystem;
     public TextMeshProUGUI score;
+    public TextMeshProUGUI time;
+    public TextMeshProUGUI goal;
 
     private TextMeshProUGUI[] displays;
     private Button[] buttons;
@@ -23,6 +25,7 @@ public class DisplayState : MonoBehaviour
 
         this.displays = new TextMeshProUGUI[n];
         this.buttons = new Button[n];
+        this.time.text = $"{state.Seconds}";
         for (int i = 0; i < n; i++)
         {
             var index = i;
@@ -69,6 +72,7 @@ public class DisplayState : MonoBehaviour
     private void Start()
     {
         UpdateButtons();
+        InvokeRepeating("CallTick", 1, 1);
     }
 
     public void UpdateButtons()
@@ -97,11 +101,23 @@ public class DisplayState : MonoBehaviour
         this.eventSystem.SetSelectedGameObject(selected);
     }
 
+    public void UpdateSeconds()
+    {
+        var state = GameState.Global;
+        this.time.text = $"{state.Seconds}";
+    }
+
+    private void CallTick()
+    {
+        GameState.Global.Tick();
+    }
+
     private void OnEnable()
     {
         GameState.OnBoardUpdated += UpdateButtons;
         GameState.OnScoreUpdated += UpdateScore;
         GameState.OnSelectUpdated += UpdateSelected;
+        GameState.OnSecondsUpdated += UpdateSeconds;
     }
 
     private void OnDisable()
@@ -109,5 +125,6 @@ public class DisplayState : MonoBehaviour
         GameState.OnBoardUpdated -= UpdateButtons;
         GameState.OnScoreUpdated -= UpdateScore;
         GameState.OnSelectUpdated -= UpdateSelected;
+        GameState.OnSecondsUpdated -= UpdateSeconds;
     }
 }
