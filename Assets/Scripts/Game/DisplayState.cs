@@ -28,6 +28,7 @@ public class DisplayState : MonoBehaviour
         this.displays = new TextMeshProUGUI[n];
         this.buttons = new Button[n];
         this.time.text = $"{state.Seconds}";
+        this.goal.text = $"{GameState.Goal}";
         for (int i = 0; i < n; i++)
         {
             var index = i;
