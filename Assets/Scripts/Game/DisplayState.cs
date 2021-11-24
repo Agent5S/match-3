@@ -9,6 +9,7 @@ public class DisplayState : MonoBehaviour
     static readonly char[] Symbols = { 'A', 'B', 'C', 'D', 'E', 'F' };
 
     public GameObject buttonPrefab;
+    public TextMeshProUGUI score;
 
     private TextMeshProUGUI[] displays;
     private Button[] buttons;
@@ -79,13 +80,21 @@ public class DisplayState : MonoBehaviour
         }
     }
 
+    public void UpdateScore()
+    {
+        var state = GameState.Global;
+        this.score.text = $"{state.Score}";
+    }
+
     private void OnEnable()
     {
         GameState.OnBoardUpdated += UpdateButtons;
+        GameState.OnScoreUpdated += UpdateScore;
     }
 
     private void OnDisable()
     {
         GameState.OnBoardUpdated -= UpdateButtons;
+        GameState.OnScoreUpdated -= UpdateScore;
     }
 }
