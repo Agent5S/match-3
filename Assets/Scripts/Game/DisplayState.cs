@@ -6,11 +6,12 @@ using TMPro;
 
 public class DisplayState : MonoBehaviour
 {
-    static readonly char[] Symbols = { 'A', 'B', 'C', 'D' };
+    static readonly char[] Symbols = { 'A', 'B', 'C', 'D', 'E', 'F' };
 
     public GameObject buttonPrefab;
 
     private TextMeshProUGUI[] displays;
+    private Button[] buttons;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class DisplayState : MonoBehaviour
         var n = state.Board.Length;
 
         this.displays = new TextMeshProUGUI[n];
+        this.buttons = new Button[n];
         for (int i = 0; i < n; i++)
         {
             var index = i;
@@ -25,11 +27,39 @@ public class DisplayState : MonoBehaviour
             Button btnComponent = button.GetComponent<Button>();
             //FIXME: This will create a different lambda per button,
             //put this inside a component
-            btnComponent.onClick.AddListener(() => { state.Select(index); });
+            btnComponent.onClick.AddListener(() => {
+                StartCoroutine(ButtonSelect(index));
+            });
             TextMeshProUGUI display = button
                 .GetComponentInChildren<TextMeshProUGUI>();
             this.displays[i] = display;
+            this.buttons[i] = btnComponent;
             button.transform.SetParent(transform);
+        }
+    }
+
+    private IEnumerator ButtonSelect(int index)
+    {
+        if (GameState.Global.Select(index))
+        {
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i].enabled = false;
+            }
+            int matches;
+            do
+            {
+                yield return new WaitForSeconds(0.6f);
+                if (GameState.Global.ReplaceMatches())
+                {
+                    yield return new WaitForSeconds(0.6f);
+                }
+                matches = GameState.Global.CheckMatches();
+            } while (matches > 0);
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i].enabled = true;
+            }
         }
     }
 
@@ -44,7 +74,8 @@ public class DisplayState : MonoBehaviour
         for (int i = 0; i < displays.Length; i++)
         {
             var display = displays[i];
-            display.text = $"{Symbols[state.Board[i]]}";
+            var character = state.Board[i] < 0 ? ' ' : Symbols[state.Board[i]];
+            display.text = $"{character}";
         }
     }
 
