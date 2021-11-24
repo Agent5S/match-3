@@ -11,7 +11,7 @@ public class DisplayMessage : MonoBehaviour
     private void Start()
     {
         var won = GameState.Global.Score > GameState.Goal;
-        var message = won ? "Buen trabajo!" : "Mejor suerte a próxima";
+        var message = won ? "Buen trabajo!" : "Mejor suerte a la próxima";
         this.message.text = message;
         this.score.text = $"{GameState.Global.Score} / {GameState.Goal}";
     }
