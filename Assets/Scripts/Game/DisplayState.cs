@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class DisplayState : MonoBehaviour
@@ -9,6 +10,7 @@ public class DisplayState : MonoBehaviour
     static readonly char[] Symbols = { 'A', 'B', 'C', 'D', 'E', 'F' };
 
     public GameObject buttonPrefab;
+    public EventSystem eventSystem;
     public TextMeshProUGUI score;
 
     private TextMeshProUGUI[] displays;
@@ -86,15 +88,26 @@ public class DisplayState : MonoBehaviour
         this.score.text = $"{state.Score}";
     }
 
+    public void UpdateSelected()
+    {
+        var state = GameState.Global;
+        var selected = state.SelectedIdx > 0 ?
+            buttons[state.SelectedIdx].gameObject :
+            null;
+        this.eventSystem.SetSelectedGameObject(selected);
+    }
+
     private void OnEnable()
     {
         GameState.OnBoardUpdated += UpdateButtons;
         GameState.OnScoreUpdated += UpdateScore;
+        GameState.OnSelectUpdated += UpdateSelected;
     }
 
     private void OnDisable()
     {
         GameState.OnBoardUpdated -= UpdateButtons;
         GameState.OnScoreUpdated -= UpdateScore;
+        GameState.OnSelectUpdated -= UpdateSelected;
     }
 }
