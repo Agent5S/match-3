@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DisplayState : MonoBehaviour
 {
@@ -104,6 +105,10 @@ public class DisplayState : MonoBehaviour
     public void UpdateSeconds()
     {
         var state = GameState.Global;
+        if (state.Seconds == 0)
+        {
+            SceneManager.LoadSceneAsync(2);
+        }
         this.time.text = $"{state.Seconds}";
     }
 
