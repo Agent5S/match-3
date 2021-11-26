@@ -8,7 +8,7 @@ Se puede intercambiar la posición cualquier par de celdas adyacentes. Al juntar
 
 ## Algunas cosas por hacer
 
-Agregar arte, animar los intercambios de las celdas, agregar efectos de sonido y música, agregar botón de pausa.
+Agregar arte, animar los intercambios de las celdas, agregar efectos de sonido y música, agregar botón de pausa. Utilizar un object pool para reciclar los personajes que han sido eliminados.
 
 ## Errores
 
